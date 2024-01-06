@@ -8,10 +8,26 @@ router.get('/', (req, res) => {
             res.status(500).json({ error: err.message });
             return;
         }
-        res.json({
-            "message": "success",
-            "data": rows
-        });
+        res.json(rows);
+    });
+});
+
+router.get('/project/:id', (req, res) => {
+    const id = req.params.id;
+
+    const sql = "SELECT * FROM MyProjects WHERE id = ?";
+    const params = [id];
+
+    db.get(sql, params, (err, row) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        if (row) {
+            res.json(row);
+        } else {
+            res.status(404).json({ message: "Project not found" });
+        }
     });
 });
 
